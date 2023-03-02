@@ -21,8 +21,8 @@ client.on('clickButton', async (button) => {
       });
   } else if (button.id == 'Liked-response') {
     button.reply.send(`<@${button.clicker.user.id}> Like this response`)
-    button.clicker.user.send("I saw that you liked our answer we just wanted to ask whether the answer was good ")
-  }else if(button.id == 'Regenerate-response-hey') {
+    button.clicker.user.send("I saw that you liked our answer if you saw things to upgrade you can type `$suggestion <Suggestion>`, Have a nice day!");
+  } else if(button.id == 'Regenerate-response-hey') {
     button.reply.send(`Trying to find another response `, false)
     .then(sentMessage => {
       setTimeout(async () => {
@@ -36,21 +36,47 @@ client.on('clickButton', async (button) => {
           await button.channel.send({content: 'New response: "Hey!, How can i help you today?"', component: row});
   }, 5000);
     });
+  } else if (button.id == 'Regenerate-response-midjourney') {
+    button.reply.send(`Trying to find another response`, false)
+    .then(sentMessage => {
+      setTimeout(async () => {
+        sentMessage.edit('Thank you for your patience, We find one new responses')
+        const embed = new MessageEmbed()
+        .setDescription(responses.RegenMidjourneyResponse)
+        const likebtn = new disbut.MessageButton()
+        .setStyle('green')
+        .setLabel('Good response')
+        .setID('Liked-response');
+        const row = new disbut.MessageActionRow()
+        .addComponent([likebtn])
+        await button.channel.send({content: 'New response: ', embed: embed, component: row});
+  }, 32000);
+    });
+  } else if (button.id == 'Regenerate-response-sexchange') {
+    button.reply.send(`Trying to find another response`, false)
+    .then(sentMessage => {
+      setTimeout(async () => {
+        sentMessage.edit('Thank you for your patience, We find one new responses')
+        const embed = new MessageEmbed()
+        .setDescription(responses.SexchangeResponse)
+        const likebtn = new disbut.MessageButton()
+        .setStyle('green')
+        .setLabel('Good response')
+        .setID('Liked-response');
+        const row = new disbut.MessageActionRow()
+        .addComponent([likebtn])
+        await button.channel.send({content: 'New response: ', embed: embed, component: row});
+  }, 32000);
+    });
   }{}
 });
 
-client.on('interaction', async interaction => {
-  if (!interaction.isCommand()) return;
-
-  if (interaction.commandName === 'ping') {
-    await interaction.reply('Pong!');
-  }
-});
 client.on('message', message => {
     if (message.author.bot || !message.content.startsWith(prefix)) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
+
     const userId = message.author.id;
     const now = Date.now();
     
@@ -58,7 +84,7 @@ client.on('message', message => {
       const cooldownEnd = cooldowns.get(userId);
       const timeLeft = (cooldownEnd - now) / 1000;
       if (timeLeft > 0) {
-        return message.reply(`You are on cooldown. Please wait ${timeLeft.toFixed(1)} seconds.`);
+        message.reply(`You are on cooldown. Please wait ${timeLeft.toFixed(1)} seconds.`);
       }
     }
     
@@ -81,11 +107,7 @@ client.on('message', message => {
                 sentMessage.edit('The answer is ready, Thank you for your patience.');
                 const embed = new MessageEmbed()
             .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
-            .setDescription(`The concept of "life" can be approached from different perspectives, and there is no single, definitive answer that captures all its complexities. However, in general, life can be described as a characteristic property that distinguishes organisms from non-living things, and encompasses various processes such as metabolism, growth, reproduction, adaptation, and response to stimuli.
-    
-            From a biological standpoint, life is typically defined as the state of being able to maintain homeostasis, use energy to perform vital functions, respond to stimuli, adapt to changing environments, and reproduce. Life is also characterized by the presence of complex organic molecules, such as proteins, nucleic acids, and lipids, which interact in intricate ways to create and sustain living structures and processes.
-            
-            However, the meaning and significance of life may also depend on cultural, philosophical, and personal beliefs, as well as individual experiences and goals. For some, life may be seen as a journey of self-discovery and personal growth, while for others it may be a quest for meaning and purpose, or a chance to create and contribute to society. Ultimately, the nature and meaning of life are subjective and multifaceted, and may continue to elude our full understanding and appreciation.`)
+            .setDescription(responses.LifeResponse)
             .setColor('#0099ff');
       
             const button = new disbut.MessageButton()
@@ -387,6 +409,33 @@ client.on('message', message => {
           message.channel.send({ embed: embed, component: row });
             }, 12000);
           });
+      } else if (subcommand === 'midjourney' || subcommand === 'who-is-midjourney' || subcommand === 'what-is-midjourney') {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(5)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
+            .setDescription(responses.MidjourneyResponse)
+            .setColor('#0099ff');
+
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response-midjourney');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+
+            const row = new disbut.MessageActionRow()
+            .addComponent([button])
+            .addComponent([likebtn])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 12000);
+          });
       } else if (subcommand === 'what-is-minecraft' || subcommand === 'minecraft') {
         message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(5)}, The answer will be sending.`)
         .then(sentMessage => {
@@ -446,12 +495,12 @@ client.on('message', message => {
             }, 15000);
           });
       } else if (subcommand === "eminem" || subcommand === "who-is-eminem") {
-        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(5)}, The answer will be sending.`)
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
         .then(sentMessage => {
             setTimeout(() => {
                 sentMessage.edit('The answer is ready, Thank you for your patience.');
                 const embed = new MessageEmbed()
-            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
             .setDescription(`Eminem, also known as Marshall Bruce Mathers III, is an American rapper, songwriter, record producer, and actor. He was born on October 17, 1972, in St. Joseph, Missouri, and raised in Detroit, Michigan.
 
             Eminem is one of the most successful and influential rappers of all time, with over 150 million records sold worldwide. He first gained mainstream attention with his second studio album, "The Slim Shady LP," which was released in 1999 and went on to win a Grammy Award for Best Rap Album.
@@ -481,12 +530,12 @@ client.on('message', message => {
             }, 15000);
           });
       } else if (subcommand === 'Who-made-you' || subcommand === 'WHO-MADE-YOU' || subcommand === 'who-made-you') {
-        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(5)}, The answer will be sending.`)
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
         .then(sentMessage => {
             setTimeout(() => {
                 sentMessage.edit('The answer is ready, Thank you for your patience.');
                 const embed = new MessageEmbed()
-            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
             .setDescription(`The one who are made me is Louiml, Louiml is a company that helps people and made some game applications and AIs, If you have any suggestions you talk with us in [Twitter](https://twitter.com/@louiml), also you can talk with us using a command in our bot, type "$owner-dm <message>" and we will get your message in our DM or you can just send to us a mail with our email (home.louiml@gmail.com), However, if you like our bot you can send a feedback at our site (https://feedback.louiml.net), And our project it's open-source so you can send a pull request (https://github.com/funmmer/DisGPT).`)
             .setColor('#0099ff');
       
@@ -508,12 +557,12 @@ client.on('message', message => {
             }, 15000);
           });
       } else if (subcommand === 'UMS' || subcommand === "ums" || subcommand === "code-a-unity-movement-script" || subcommand === 'Unity-Movement-Script' || subcommand === 'unity-movement-script') {
-        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(5)}, The answer will be sending.`)
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
         .then(sentMessage => {
             setTimeout(() => {
                 sentMessage.edit('The answer is ready, Thank you for your patience.');
                 const embed = new MessageEmbed()
-            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
             .setDescription(`As an AI language model, I can provide guidance and general principles for coding a movement script in Unity 3D, but I cannot write a complete script for you. Here are some general steps and tips for coding a basic movement script in Unity 3D:
 
             1. Create a new script by clicking on "Assets > Create > C# Script" in the Unity editor.
@@ -625,12 +674,12 @@ You can attach this script to a 2D character in your Unity scene to enable basic
             }, 15000);
           });
       } else if (subcommand === 'c++' || subcommand === "what-is-c++" || subcommand === "what-is-the-c++-language" || subcommand === 'cpp' || subcommand === 'what-is-cpp') {
-        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(5)}, The answer will be sending.`)
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
         .then(sentMessage => {
             setTimeout(() => {
                 sentMessage.edit('The answer is ready, Thank you for your patience.');
                 const embed = new MessageEmbed()
-            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
             .setDescription(`C++ is a high-level, general-purpose programming language that was developed in the early 1980s as an extension of the C programming language. C++ is an object-oriented language, which means that it allows developers to define their own data types, called classes, and provides support for encapsulation, inheritance, and polymorphism.
 
             C++ is a compiled language, which means that programs written in C++ are converted into machine code that can be executed directly by a computer's CPU. C++ is also a cross-platform language, which means that programs written in C++ can be compiled and executed on different platforms, including Windows, Mac, and Linux.
@@ -657,10 +706,109 @@ You can attach this script to a 2D character in your Unity scene to enable basic
           message.channel.send({ embed: embed, component: row });
             }, 15000);
           });
-      } else {
+      } else if (subcommand === 'sexchange' || subcommand === "sex-change" || subcommand === "what-is-sexchange" || subcommand === 'what-is-sex-change') {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
+            .setDescription(responses.SexChangeResponse)
+            .setColor('#0099ff');
+      
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response-sexchange');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([button])
+            .addComponent([likebtn])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 15000);
+          });
+      } else if (subcommand === 'dm') {
+        const args = message.content.slice(prefix.length).trim().split(/ +/);
+        const input = args.slice(1).join(' ');
+      
+        if (!message.mentions.users.size) {
+          return message.reply('Please mention a user to send the message to!');
+        }
+
+        const userDM = message.mentions.users.first().dmChannel;
+      
+        if (!userDM) {
+          message.mentions.users.first().createDM()
+            .then(dm => {
+              dm.send(`${input}`);
+            })
+            .catch(console.error);
+        } else {
+          userDM.send(`${input}`);
+        }
+    } else {
         message.reply(`As an AI language model, I do not generate "${subcommand}" in the traditional sense.\n However, if there is an issue with my functioning, I may provide feedback or prompts to help\n resolve the problem. For example, if I do not understand a question or input, I may ask\n for clarification or suggest alternative phrasing. Similarly, if I encounter a technical issue, I may\n provide information or instructions to address the problem.`);
       }
     }
   });
 
+  client.on('message', message => {
+    if (message.content.startsWith('$suggestion')) {
+    const reason = message.content.slice('$suggestion'.length).trim();
+      const userId = '1019290805963329587';
+      const TheSuggestion = `<@${message.author.id}>(${message.author.tag}) make a suggestion: ${reason}`;
+      const user = client.users.cache.get(userId);
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const suggestion = args.slice(1).join(' ');
+      if (!suggestion) {
+            return message.reply('Please enter a suggestion.');
+      }
+      else {
+      user.send(TheSuggestion)
+        .then(() => {
+            message.reply(`The suggestion has been sent to the bot creator(${user.tag})`);
+        })
+      
+        .catch(error => {
+          console.error(`Failed to send message to user ${user.tag}: ${error}`);
+          message.reply(`Failed to send message to user ${user.tag}`);
+        });
+    }
+  }
+  });
+
+  client.on('message', message => {
+    if (message.content.startsWith('$privacy-policy' || '$privacypolicy')) {
+      const Embed = new MessageEmbed()
+      .setTitle('DisGPT\'s Privacy policy')
+      .setDescription(`Thank you for your interest in our Discord bot! We take your privacy very seriously and want to provide you with complete transparency about how we collect, use, and protect your data.
+
+      __**Data Collection**__
+      Our bot only collects data necessary to provide the service you requested, which is to answer questions. We do not collect any personal identifiable information such as your name, email, or address. However, we may collect some anonymous data such as the questions asked and the server they were asked in, for the purpose of improving our service and fixing any issues.
+      
+      __**Data Use**__
+      We only use the data we collect to provide the service you requested, which is to answer questions. We do not use your data for any other purpose, such as marketing or advertising. We will never sell your data to any third party.
+      
+      __**Data Storage**__
+      We store your data securely and take all necessary measures to protect it from unauthorized access, alteration, or destruction. We store the data on our servers and may use third-party services for data storage and processing. We will not store your data longer than necessary, and we will delete it when we no longer need it.
+      
+      __**Data Sharing**__
+      We do not share your data with anyone except when required by law or when we need to share it with our third-party service providers to provide the service you requested. We make sure that any third-party service provider we work with complies with our privacy policy and takes necessary measures to protect your data.
+      
+      __**Changes to Privacy Policy**__
+      We may update this privacy policy from time to time to reflect changes in our services, the law, or our data collection and use practices. If we make any significant changes to this policy, we will notify you by posting a notice on our website or via the Discord bot.
+      
+      __**Contact Us**__
+      If you have any questions or concerns about our privacy policy or data practices, please contact us at home.loui.ml@gmail.com. We will be happy to answer any questions or concerns you may have.`)
+      message.reply(Embed);
+    }
+  });
+
 client.login(token);
+
