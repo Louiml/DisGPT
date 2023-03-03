@@ -7,5 +7,5 @@ https://discord.com/api/oauth2/authorize?client_id=1078767993221300384&permissio
 ### `IP lookup added`
 ### `More responses`
 ### `Bugs fixed`
-### `Privacy policy added`
+### `Privacy policy added` [Look at the privacy policy](https://github.com/funmmer/DisGPT/edit/main/Privacy-Policy.md)
 ### `Suggestion command added`
