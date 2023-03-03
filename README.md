@@ -2,7 +2,7 @@
 #### Version: 0.4
 #### Last Update: 4:37 PM | 3/3/2023
 ## What's new in the update?
-### `Translate system added`
+### `Translate system(beta) added`
 ### `Block bad words system added`
 ### `More responses`
 ### `Bugs fixed`
