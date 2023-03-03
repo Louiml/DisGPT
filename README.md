@@ -3,8 +3,9 @@
 https://discord.com/api/oauth2/authorize?client_id=1078767993221300384&permissions=8&scope=bot%20applications.commands
 #### Version: 0.3
 #### Last Update: 12:39 PM | 3/3/2023
-### IP lookup added
-### More responses
-### Bugs fixed 
-### Privacy policy added
-### Suggestion command added
+## What's new in the update?
+### `IP lookup added`
+### `More responses`
+### `Bugs fixed`
+### `Privacy policy added`
+### `Suggestion command added`
