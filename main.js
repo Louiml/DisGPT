@@ -4,35 +4,12 @@ const { prefix, token } = require('./config.json');
 const responses = require('./responses.json');
 const disbut = require('discord-buttons');
 disbut(client);
-let cooldownEnabled = true;
-const cooldowns = new Map();
 
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   const serverCount = client.guilds.cache.size;
   client.user.setActivity(`${serverCount} servers - 47 responses`, { type: 'WATCHING' });
 });
-
-function cooldown(message) {
-  const { commandName } = message;
-
-  // Check if the command has a cooldown
-  if (cooldowns.has(commandName)) {
-    const cooldown = cooldowns.get(commandName);
-    const remainingTime = cooldown - (Date.now() - cooldown);
-
-    if (remainingTime > 0) {
-      message.reply(`Please wait ${Math.round(remainingTime / 1000)} seconds before using this command again.`);
-      return;
-    }
-  }
-
-  // Your command code here
-
-  // Set the cooldown for the command
-  const cooldownTime = 60 * 1000; // 1 minute cooldown
-  cooldowns.set(commandName, Date.now() + cooldownTime);
-}
 
 client.on('clickButton', async (button) => {
   if (button.id == 'Regenerate-response') {
