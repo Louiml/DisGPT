@@ -8,7 +8,7 @@ disbut(client);
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   const serverCount = client.guilds.cache.size;
-  client.user.setActivity(`${serverCount} servers - 47 responses`, { type: 'WATCHING' });
+  client.user.setActivity(`${serverCount} servers - 48 responses`, { type: 'WATCHING' });
 });
 
 client.on('clickButton', async (button) => {
@@ -847,6 +847,65 @@ You can attach this script to a 2D character in your Unity scene to enable basic
         message.channel.send(`Your IPv6 address is ${ipAddress}`);
       } else {
         message.channel.send('Error: invalid IP version (must be v4 or v6)');
+      }
+    }
+  });
+
+  const badWords = ["arse", "arsehead", "arsehole", "ass", "asshole", "bastard", "bitch", "bloody", "bollocks", "brotherfucker", "bugger", "bullshit", "child-fucker", "Christ on a bike", "Christ on a cracker", "cock", "cocksucker", "crap", "cunt", "damn", "damn it", "dick", "dickhead", "dyke", "fatherfucker", "frigger", "fuck", "goddamn", "godsdamn", "hell", "holy shit", "horseshit", "in shit", "Jesus Christ", "Jesus fuck", "Jesus H. Christ", "Jesus Harold Christ", "Jesus wept", "Jesus, Mary and Joseph", "kike", "motherfucker", "nigga", "nigra", "nigro", "nigger", "piss", "prick", "pussy", "shit", "shit ass", "shite", "sisterfucker", "slut", "son of a bitch", "son of a whore", "spastic", "sweet Jesus", "turd", "twat", "wanker"];
+  const warningThreshold = 5;
+  const timeoutDuration = 5 * 60 * 1000;
+  
+  let userWarnings = new Map();
+  
+  client.on("message", (message) => {
+    if (message.author.bot) return;
+    if (message.content.startsWith(prefix)) return;
+  
+    const lowercaseMessage = message.content.toLowerCase();
+    if (badWords.some((word) => lowercaseMessage.includes(word))) {
+      message.delete();
+      const userId = message.author.id;
+      const userWarningCount = userWarnings.get(userId) || 0;
+      userWarnings.set(userId, userWarningCount + 1);
+      if (userWarningCount + 1 >= warningThreshold) {
+        const timeoutRole = message.guild.roles.cache.find((role) => role.name === "Timeout");
+        message.member.roles.add(timeoutRole);
+        userWarnings.delete(userId);
+        message.channel.send(`<@${message.author.id}> You got 5 warnings to stop and you didn't stop, you are in timeout for five minutes`)
+        setTimeout(() => {
+          message.member.roles.remove(timeoutRole);
+        }, timeoutDuration);
+      } else {
+        message.reply(`Please refrain from using bad language. You have ${warningThreshold - userWarningCount - 1} warnings left before a timeout.`);
+      }
+    }
+  });
+
+  client.on('message', async (message) => {
+    if (message.author.bot || !message.content.startsWith(prefix)) return;
+
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+  
+    if (command === 'translate') {
+      if (args.length < 2) {
+        return message.reply('Please provide the source language and the text to translate!');
+      }
+
+      const text = args.slice(2).join(' ');
+  
+      try {
+        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(args[0])}|${args[1]}`);
+        const data = await response.json();
+  
+        if (data.responseData && data.responseData.translatedText) {
+          message.channel.send(`Translation (${args[0]} to ${args[1]}): ${data.responseData.translatedText}`);
+        } else {
+          message.reply('Unable to translate text. Please try again later.');
+        }
+      } catch (error) {
+        console.error(error);
+        message.reply('Unable to translate text. Please try again later.');
       }
     }
   });
