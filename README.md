@@ -1,12 +1,11 @@
 # DisGPT
-#### Version: 0.3
-#### Last Update: 12:39 PM | 3/3/2023
+#### Version: 0.4
+#### Last Update: 4:37 PM | 3/3/2023
 ## What's new in the update?
-### `IP lookup added`
+### `Translate system added`
+### `Block bad words system added`
 ### `More responses`
 ### `Bugs fixed`
-### `Privacy policy added` [Look at the privacy policy](https://github.com/funmmer/DisGPT/edit/main/Privacy-Policy.md)
-### `Suggestion command added`
 # why you should order DisGPT?
 #### Here are some persuasive reasons why you should order DisGPT, your very own Discord bot that can answer questions with the $gpt command, has a privacy policy that can be accessed with the $privacy-policy command, and is available to invite through this link: https://discord.com/api/oauth2/authorize?client_id=1078767993221300384&permissions=8&scope=bot%20applications.commands.
 
