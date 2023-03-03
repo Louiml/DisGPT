@@ -4,12 +4,35 @@ const { prefix, token } = require('./config.json');
 const responses = require('./responses.json');
 const disbut = require('discord-buttons');
 disbut(client);
+let cooldownEnabled = true;
 const cooldowns = new Map();
 
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
-  client.user.setActivity('Answering some questions');
+  const serverCount = client.guilds.cache.size;
+  client.user.setActivity(`${serverCount} servers - 47 responses`, { type: 'WATCHING' });
 });
+
+function cooldown(message) {
+  const { commandName } = message;
+
+  // Check if the command has a cooldown
+  if (cooldowns.has(commandName)) {
+    const cooldown = cooldowns.get(commandName);
+    const remainingTime = cooldown - (Date.now() - cooldown);
+
+    if (remainingTime > 0) {
+      message.reply(`Please wait ${Math.round(remainingTime / 1000)} seconds before using this command again.`);
+      return;
+    }
+  }
+
+  // Your command code here
+
+  // Set the cooldown for the command
+  const cooldownTime = 60 * 1000; // 1 minute cooldown
+  cooldowns.set(commandName, Date.now() + cooldownTime);
+}
 
 client.on('clickButton', async (button) => {
   if (button.id == 'Regenerate-response') {
@@ -58,7 +81,7 @@ client.on('clickButton', async (button) => {
       setTimeout(async () => {
         sentMessage.edit('Thank you for your patience, We find one new responses')
         const embed = new MessageEmbed()
-        .setDescription(responses.SexchangeResponse)
+        .setDescription(responses.RegenSexchangeResponse)
         const likebtn = new disbut.MessageButton()
         .setStyle('green')
         .setLabel('Good response')
@@ -66,7 +89,7 @@ client.on('clickButton', async (button) => {
         const row = new disbut.MessageActionRow()
         .addComponent([likebtn])
         await button.channel.send({content: 'New response: ', embed: embed, component: row});
-  }, 32000);
+  }, 2000);
     });
   }{}
 });
@@ -77,29 +100,14 @@ client.on('message', message => {
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
 
-    const userId = message.author.id;
-    const now = Date.now();
-    
-    if (cooldowns.has(userId)) {
-      const cooldownEnd = cooldowns.get(userId);
-      const timeLeft = (cooldownEnd - now) / 1000;
-      if (timeLeft > 0) {
-        message.reply(`You are on cooldown. Please wait ${timeLeft.toFixed(1)} seconds.`);
-      }
-    }
-    
-    const cooldownEnd = now + 1 * 60 * 1000;
-    cooldowns.set(userId, cooldownEnd);
-    
-    setTimeout(() => cooldowns.delete(userId), 1 * 60 * 1000);
-
     if (command === 'gpt') {
       if (!args.length) {
         return message.reply('Please enter a question(The bot system has a bug with spaces so when you want to space you gotta put "-")');
       }
   
       const subcommand = args.shift().toLowerCase();
-  
+
+
       if (subcommand === 'What-is-life' || subcommand === 'what-is-life') {
         message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(5)}, The answer will be sending.`)
         .then(sentMessage => {
@@ -390,6 +398,33 @@ client.on('message', message => {
                 const embed = new MessageEmbed()
             .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
             .setDescription(responses.AnimeResponse)
+            .setColor('#0099ff');
+
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+
+            const row = new disbut.MessageActionRow()
+            .addComponent([button])
+            .addComponent([likebtn])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 12000);
+          });
+      } else if (subcommand === 'what-is-bulbul' || subcommand === 'bulbul') {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(5)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
+            .setDescription(responses.BulbulResponse)
             .setColor('#0099ff');
 
             const button = new disbut.MessageButton()
@@ -810,5 +845,33 @@ You can attach this script to a 2D character in your Unity scene to enable basic
     }
   });
 
-client.login(token);
+  client.on('message', async (message) => {
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
+  
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+  
+    if (command === 'ip') {
+      if (args.length === 0) {
+        return message.channel.send('Error: please specify IP version (v4 or v6)');
+      }
+  
+      if (args[0] === 'v4') {
+        const url = 'https://api.ipify.org?format=json';
+        const response = await fetch(url);
+        const json = await response.json();
+        const ipAddress = json.ip;
+        message.channel.send(`Your IPv4 address is ${ipAddress}`);
+      } else if (args[0] === 'v6') {
+        const url = 'https://api64.ipify.org?format=json';
+        const response = await fetch(url);
+        const json = await response.json();
+        const ipAddress = json.ip;
+        message.channel.send(`Your IPv6 address is ${ipAddress}`);
+      } else {
+        message.channel.send('Error: invalid IP version (must be v4 or v6)');
+      }
+    }
+  });
 
+client.login(token);
