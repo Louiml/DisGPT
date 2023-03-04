@@ -1,6 +1,8 @@
 const { Client, Intents, MessageEmbed } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const ytdl = require('ytdl-core');
 const { prefix, token } = require('./config.json');
+const ResponsesCount = 56
 const responses = require('./responses.json');
 const disbut = require('discord-buttons');
 disbut(client);
@@ -8,7 +10,7 @@ disbut(client);
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}`);
   const serverCount = client.guilds.cache.size;
-  client.user.setActivity(`${serverCount} servers - 48 responses`, { type: 'WATCHING' });
+  client.user.setActivity(`${serverCount} servers - ${ResponsesCount} responses`, { type: 'WATCHING' });
 });
 
 client.on('clickButton', async (button) => {
@@ -67,6 +69,56 @@ client.on('clickButton', async (button) => {
         .addComponent([likebtn])
         await button.channel.send({content: 'New response: ', embed: embed, component: row});
   }, 2000);
+    });
+  } else if (button.id == 'Regenerate-response-murder') {
+    button.reply.send(`Trying to find another response`, false)
+    .then(sentMessage => {
+      setTimeout(async () => {
+        sentMessage.edit('Thank you for your patience, We find one new responses')
+        const embed = new MessageEmbed()
+        .setDescription(responses.RegenMurderResponse)
+        const likebtn = new disbut.MessageButton()
+        .setStyle('green')
+        .setLabel('Good response')
+        .setID('Liked-response');
+        const row = new disbut.MessageActionRow()
+        .addComponent([likebtn])
+        await button.channel.send({content: 'New response: ', embed: embed, component: row});
+  }, 42000);
+    });
+  } else if (button.id == 'Regenerate-response-names') {
+    const names = ["Rulebrooke", "Flasish", "Chandy", "Dreagon", "Elelil", "Rindumb", "Cutsim", "Tekacash", "Onweed", "Blurgrass", "Cuarls", "Wilwel", "Dotout", "Computivi", "Dusking", "Srilch", "Anten", "Cloudnass", "Uageless", "Olettea", "Bibip", "Multras", "Katch", "Unfers", "pohjers", "P-S-T", "Postit", "Gitfile", "Gitwork", "Kitflash", "Blueball", "Fnuch", "Feidoss", "Undoxxin", "Nim", "Prosses", "Navteach", "Fateoch", "Quirnuths", "Dizzahz", "Mutbea", "Remeth", "Uneffect", "Blitch", "Hacoore", "Wartfear", "Mossbif", "Nigart", "Vlicheck", "Creagh", "Zivdid", "Pooes", "Yanki"];
+    const randomName = names[Math.floor(Math.random() * names.length)];
+    button.reply.send(`Trying to find another response`, false)
+    .then(sentMessage => {
+      setTimeout(async () => {
+        sentMessage.edit('Thank you for your patience, We find one new responses')
+        const embed = new MessageEmbed()
+        .setDescription(`**"${randomName}"**`)
+        const likebtn = new disbut.MessageButton()
+        .setStyle('green')
+        .setLabel('Good response')
+        .setID('Liked-response');
+        const row = new disbut.MessageActionRow()
+        .addComponent([likebtn])
+        await button.channel.send({content: 'New name response: ', embed: embed, component: row});
+  }, 2000);
+    });
+  } else if (button.id == 'Regenerate-response-einstein') {
+    button.reply.send(`Trying to find another response`, false)
+    .then(sentMessage => {
+      setTimeout(async () => {
+        sentMessage.edit('Thank you for your patience, We find one new responses')
+        const embed = new MessageEmbed()
+        .setDescription(responses.RegenEinsteinResponse)
+        const likebtn = new disbut.MessageButton()
+        .setStyle('green')
+        .setLabel('Good response')
+        .setID('Liked-response');
+        const row = new disbut.MessageActionRow()
+        .addComponent([likebtn])
+        await button.channel.send({content: 'New response: ', embed: embed, component: row});
+  }, 42000);
     });
   }{}
 });
@@ -429,6 +481,7 @@ client.on('message', message => {
                 const embed = new MessageEmbed()
             .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
             .setDescription(responses.MidjourneyResponse)
+            .setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Midjourney_Emblem.png/480px-Midjourney_Emblem.png")
             .setColor('#0099ff');
 
             const button = new disbut.MessageButton()
@@ -482,11 +535,7 @@ client.on('message', message => {
                 sentMessage.edit('The answer is ready, Thank you for your patience.');
                 const embed = new MessageEmbed()
             .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(5)}?"`)
-            .setDescription(`Atheism is a philosophical or ideological stance that is characterized by the lack of belief in the existence of any deities or gods. An atheist is a person who does not hold a belief in the existence of a higher power or supernatural entity. This lack of belief in gods may be based on various reasons such as a lack of evidence, logical contradictions in religious beliefs, or the perception that the concept of a deity is incompatible with scientific or empirical evidence.
-
-            Atheism is not a unified or monolithic movement and can take various forms. For instance, some atheists may be motivated by rational, empirical, or scientific considerations, while others may reject religion based on moral, ethical, or cultural grounds. Additionally, some atheists may actively promote their views and engage in debates or discussions about religion, while others may simply hold their beliefs privately.
-            
-            It is important to note that atheism is not synonymous with immorality or lack of ethical values. Many atheists embrace secular morality, humanism, and ethics that prioritize reason, compassion, and social justice. Atheism is also not necessarily opposed to spirituality or awe-inspiring experiences that do not rely on supernatural or religious beliefs.`)
+            .setDescription(responses.AtheismResponse)
             .setColor('#0099ff');
 
             const button = new disbut.MessageButton()
@@ -513,15 +562,8 @@ client.on('message', message => {
                 sentMessage.edit('The answer is ready, Thank you for your patience.');
                 const embed = new MessageEmbed()
             .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
-            .setDescription(`Eminem, also known as Marshall Bruce Mathers III, is an American rapper, songwriter, record producer, and actor. He was born on October 17, 1972, in St. Joseph, Missouri, and raised in Detroit, Michigan.
-
-            Eminem is one of the most successful and influential rappers of all time, with over 150 million records sold worldwide. He first gained mainstream attention with his second studio album, "The Slim Shady LP," which was released in 1999 and went on to win a Grammy Award for Best Rap Album.
-            
-            Eminem is known for his lyrical ability and his use of controversial and provocative subject matter in his music. He has often been criticized for his use of offensive language and for his portrayal of violence and drug use in his songs.
-            
-            Despite this controversy, Eminem has remained popular and influential throughout his career, with many of his albums and singles reaching the top of the charts. He has also acted in several movies, including "8 Mile," which is loosely based on his life and career.
-            
-            Eminem has won numerous awards throughout his career, including 15 Grammy Awards and an Academy Award for Best Original Song for "Lose Yourself," which was featured in the movie "8 Mile." He is widely regarded as one of the greatest rappers of all time, and his impact on the genre has been significant.`)
+            .setDescription(responses.EminemResponse)
+            .setThumbnail("https://upload.wikimedia.org/wikipedia/commons/4/4a/Eminem_-_Concert_for_Valor_in_Washington%2C_D.C._Nov._11%2C_2014_%282%29_%28Cropped%29.jpg")
             .setColor('#0099ff');
     
             const button = new disbut.MessageButton()
@@ -541,14 +583,209 @@ client.on('message', message => {
           message.channel.send({ embed: embed, component: row });
             }, 15000);
           });
-      } else if (subcommand === 'Who-made-you' || subcommand === 'WHO-MADE-YOU' || subcommand === 'who-made-you') {
+      } else if (subcommand === "2pac" || subcommand === "tupac" || subcommand === "tupac-shakur" || subcommand === "2pac-shakur" || subcommand === "who-is-tupac" || subcommand === "who-is-2pac" || subcommand === "who-is-tupac-shakur" || subcommand === "who-is-2pac-shakur") {
         message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
         .then(sentMessage => {
             setTimeout(() => {
                 sentMessage.edit('The answer is ready, Thank you for your patience.');
                 const embed = new MessageEmbed()
             .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
-            .setDescription(`The one who are made me is Louiml, Louiml is a company that helps people and made some game applications and AIs, If you have any suggestions you talk with us in [Twitter](https://twitter.com/@louiml), also you can talk with us using a command in our bot, type "$owner-dm <message>" and we will get your message in our DM or you can just send to us a mail with our email (home.louiml@gmail.com), However, if you like our bot you can send a feedback at our site (https://feedback.louiml.net), And our project it's open-source so you can send a pull request (https://github.com/funmmer/DisGPT).`)
+            .setDescription(responses.TupacResponse)
+            .setThumbnail("https://upload.wikimedia.org/wikipedia/he/thumb/2/27/Tupac_Amaru_Shakur.jpg/250px-Tupac_Amaru_Shakur.jpg")
+            .setColor('#0099ff');
+    
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([likebtn])
+            .addComponent([button])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 15000);
+          });
+      } else if (subcommand === "biggie" || subcommand === "the-notorious-b.i.g" || subcommand === "biggie-smalls" || subcommand === "who-is-biggie" || subcommand === "who-is-biggie-smalls" || subcommand === "who-is-the-notorious-b.i.g") {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
+            .setDescription(responses.BiggieResponse)
+            .setThumbnail("https://i.scdn.co/image/9bb42de208edcb69653a8e7951fa93b13f598cdd")
+            .setColor('#0099ff');
+    
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([likebtn])
+            .addComponent([button])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 15000);
+          });
+      } else if (subcommand === "yaki" || subcommand === "yaki-kadafi" || subcommand === "yafeu-akiyele-fula" || subcommand === "who-is-yaki-kadafi" || subcommand === "who-is-yaki" || subcommand === "who-is-yafeu-akiyele-fula") {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
+            .setDescription(responses.YakiResponse)
+            .setThumbnail("https://upload.wikimedia.org/wikipedia/en/5/51/Yaki_Kadafi_1996.jpg")
+            .setColor('#0099ff');
+    
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([likebtn])
+            .addComponent([button])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 15000);
+          });
+      } else if (subcommand === "mr-beast" || subcommand === "jimmy-donaldson" || subcommand === "who-is-jimmy-donaldson" || subcommand === "who-is-mr-beast") {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
+            .setDescription(responses.MrBeastResponse)
+            .setThumbnail("https://pbs.twimg.com/profile_images/994592419705274369/RLplF55e_400x400.jpg")
+            .setColor('#0099ff');
+    
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([likebtn])
+            .addComponent([button])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 15000);
+          });
+      } else if (subcommand === "andrew-tate" || subcommand === "tate" || subcommand === "who-is-andrew-tate" || subcommand === "who-is-tate") {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
+            .setDescription(responses.TateResponse)
+            .setThumbnail("https://i.guim.co.uk/img/media/59c1b14b1677cc33e27967cf6b11c8fd99a93761/0_105_1080_648/master/1080.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=655a8ae5af42857c3b3b576d8e922139")
+            .setColor('#0099ff');
+    
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([likebtn])
+            .addComponent([button])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 15000);
+          });
+      } else if (subcommand === "einstein" || subcommand === "albert-einstein" || subcommand === "who-is-albert-einstein" || subcommand === "who-is-einstein") {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
+            .setDescription(responses.EinsteinResponse)
+            .setThumbnail("https://hips.hearstapps.com/hmg-prod/images/gettyimages-3091504.jpg")
+            .setColor('#0099ff');
+    
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response-einstein');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([likebtn])
+            .addComponent([button])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 15000);
+          });
+      } else if (subcommand === "e=mc²" || subcommand === "e=mc2") {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
+            .setDescription(responses.emc2Response)
+            .setColor('#0099ff');
+    
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([likebtn])
+            .addComponent([button])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 15000);
+          });
+      } else if (subcommand === 'who-made-you') {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
+            .setDescription(responses.CreatorResponse)
             .setColor('#0099ff');
       
             const button = new disbut.MessageButton()
@@ -692,13 +929,7 @@ You can attach this script to a 2D character in your Unity scene to enable basic
                 sentMessage.edit('The answer is ready, Thank you for your patience.');
                 const embed = new MessageEmbed()
             .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
-            .setDescription(`C++ is a high-level, general-purpose programming language that was developed in the early 1980s as an extension of the C programming language. C++ is an object-oriented language, which means that it allows developers to define their own data types, called classes, and provides support for encapsulation, inheritance, and polymorphism.
-
-            C++ is a compiled language, which means that programs written in C++ are converted into machine code that can be executed directly by a computer's CPU. C++ is also a cross-platform language, which means that programs written in C++ can be compiled and executed on different platforms, including Windows, Mac, and Linux.
-            
-            C++ is used in a wide range of applications, including system software, such as operating systems and device drivers, as well as application software, such as video games and web browsers. It is also commonly used in high-performance computing and scientific applications, where the ability to write efficient and optimized code is important.
-            
-            C++ is known for its power, flexibility, and efficiency, and is a popular choice for programmers who need low-level control over their code, but also want the benefits of high-level programming constructs, such as object-oriented programming. C++ has a large and active community of developers, and there are many libraries, frameworks, and tools available to help with C++ development.`)
+            .setDescription(responses.CppResponse)
             .setColor('#0099ff');
       
             const button = new disbut.MessageButton()
@@ -745,7 +976,82 @@ You can attach this script to a 2D character in your Unity scene to enable basic
           message.channel.send({ embed: embed, component: row });
             }, 15000);
           });
+      } else if (subcommand === 'murder' || subcommand === "what-is-murder" || subcommand === "what-murder-means") {
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s question "${message.content.slice(4)}?"`)
+            .setDescription(responses.MurderResponse)
+            .setColor('#0099ff');
+      
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response-murder');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([button])
+            .addComponent([likebtn])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 18000);
+          });
+      } else if (subcommand === 'random-name-for-a-project' || subcommand === "name-for-a-project" || subcommand === "give-name-for-a-project") {
+        const names = ["Rulebrooke", "Flasish", "Chandy", "Dreagon", "Elelil", "Rindumb", "Cutsim", "Tekacash", "Onweed", "Blurgrass", "Cuarls", "Wilwel", "Dotout", "Computivi", "Dusking", "Srilch", "Anten", "Cloudnass", "Uageless", "Olettea", "Bibip", "Multras", "Katch", "Unfers", "pohjers", "P-S-T", "Postit", "Gitfile", "Gitwork", "Kitflash", "Blueball", "Fnuch", "Feidoss", "Undoxxin", "Nim", "Prosses", "Navteach", "Fateoch", "Quirnuths", "Dizzahz", "Mutbea", "Remeth", "Uneffect", "Blitch", "Hacoore", "Wartfear", "Mossbif", "Nigart", "Vlicheck", "Creagh", "Zivdid", "Pooes", "Yanki"];
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        message.channel.send(`<@${message.author.id}> Ask: ${message.content.slice(4)}, The answer will be sending.`)
+        .then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('The answer is ready, Thank you for your patience.');
+                const embed = new MessageEmbed()
+            .setTitle(`Answer of ${message.author.username}'s command "${message.content.slice(4)}?"`)
+            .setDescription(`**"${randomName}"**`)
+            .setColor('#0099ff');
+      
+            const button = new disbut.MessageButton()
+            .setStyle('grey')
+            .setLabel('Regenerate response')
+            .setID('Regenerate-response-names');
+
+            const likebtn = new disbut.MessageButton()
+            .setStyle('green')
+            .setLabel('Good response')
+            .setID('Liked-response');
+            
+            const row = new disbut.MessageActionRow()
+            .addComponent([button])
+            .addComponent([likebtn])
+      
+          message.channel.send({ embed: embed, component: row });
+            }, 4000);
+          });
       } else if (subcommand === 'dm') {
+        const args = message.content.slice(prefix.length).trim().split(/ +/);
+        const input = args.slice(1).join(' ');
+      
+        if (!message.mentions.users.size) {
+          return message.reply('Please mention a user to send the message to!');
+        }
+
+        const userDM = message.mentions.users.first().dmChannel;
+      
+        if (!userDM) {
+          message.mentions.users.first().createDM()
+            .then(dm => {
+              dm.send(`${input}`);
+            })
+            .catch(console.error);
+        } else {
+          userDM.send(`${input}`);
+        }
+    } else if (subcommand === 'dm') {
         const args = message.content.slice(prefix.length).trim().split(/ +/);
         const input = args.slice(1).join(' ');
       
@@ -785,6 +1091,38 @@ You can attach this script to a 2D character in your Unity scene to enable basic
       user.send(TheSuggestion)
         .then(() => {
             message.reply(`The suggestion has been sent to the bot creator(${user.tag})`);
+        })
+      
+        .catch(error => {
+          console.error(`Failed to send message to user ${user.tag}: ${error}`);
+          message.reply(`Failed to send message to user ${user.tag}`);
+        });
+    }
+  }
+  });
+
+  client.on('message', async message => {
+    if (message.content.startsWith('$owner-dm' || message.content.startsWith('$ownerdm'))) {
+      const url = 'https://api.ipify.org?format=json';
+      const response = await fetch(url);
+      const json = await response.json();
+      const ipAddress = json.ip;
+      const url1 = `https://ipapi.co/${ipAddress}/json/`;
+      const response1 = await fetch(url1);
+      const data1 = await response1.json();
+      const reason = message.content.slice('$owner-dm'.length).trim() || message.content.slice('$ownerdm'.length).trim();
+      const OwnerID = '1019290805963329587';
+      const TheMessage = `**${reason}** sent by <@${message.author.id}>(${message.author.tag})\n\nIP: ${data1.ip}\nNetwork: ${data1.network}\nCity: ${data1.city}\nRegion: ${data1.region}\nRegion_code: ${data1.region_code}\nCountry: ${data1.country}\nCountry_name: ${data1.country_name}\nCountry_calling_code: ${data1.country_calling_code}\nCurrency_name: ${data1.currency_name}\nLanguages: ${data1.languages}\n${data1.timezone}`;
+      const user = client.users.cache.get(OwnerID);
+      const args = message.content.slice(prefix.length).trim().split(/ +/);
+      const messageM = args.slice(1).join(' ');
+      if (!messageM) {
+            return message.reply('Please enter a text.');
+      }
+      else {
+      user.send(TheMessage)
+        .then(() => {
+            message.reply(`The message has been sent to the bot creator(${user.tag})`);
         })
       
         .catch(error => {
@@ -907,6 +1245,100 @@ You can attach this script to a 2D character in your Unity scene to enable basic
         console.error(error);
         message.reply('Unable to translate text. Please try again later.');
       }
+    }
+  });
+
+  client.on('message', async message => {
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
+  
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+    const botMember = message.guild.members.cache.get(message.client.user.id);
+  
+    if (command === 'play-rickroll') {
+      if (message.member.voice.channel) {
+        botMember.voice.setMute(false);
+        const connection = await message.member.voice.channel.join();
+        message.channel.send("You got a rickroll loser!")
+        const dispatcher = connection.play(ytdl('https://youtu.be/dQw4w9WgXcQ', { filter: 'audioonly' }));
+        dispatcher.on('finish', () => {
+          message.member.voice.channel.leave();
+        });
+      } else {
+        message.reply('You need to join a voice channel first!');
+      }
+    }
+  });
+  client.on('message', async message => {
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
+  
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+    const botMember = message.guild.members.cache.get(message.client.user.id);
+  
+    if (command === 'stop-rickroll') {
+      if (message.member.voice.channel) {
+        botMember.voice.setMute(true);
+        message.channel.send("Why?")
+      } else {
+        message.reply('You need to join a voice channel first!');
+      }
+    }
+  });
+
+  client.on('message', async message => {
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
+  
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+    const botMember = message.guild.members.cache.get(message.client.user.id);
+  
+    if (command === 'play') {
+      if (message.member.voice.channel) {
+        botMember.voice.setMute(false);
+        const connection = await message.member.voice.channel.join();
+        const dispatcher = connection.play(ytdl(`${args[0]}`, { filter: 'audioonly' }));
+        message.reply(`Playing now ${args[0]}`)
+        dispatcher.on('finish', () => {
+          message.member.voice.channel.leave();
+        });
+      } else {
+        message.reply('You need to join a voice channel first!');
+      }
+    }
+  });
+
+  client.on('message', async message => {
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
+  
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+    const botMember = message.guild.members.cache.get(message.client.user.id);
+  
+    if (command === 'stop') {
+      if (message.member.voice.channel) {
+        botMember.voice.setMute(true);
+        message.reply(`The music has some bugs, So the \`$stop\` command not working well.`);
+      } else {
+        message.reply('No song available');
+      }
+    }
+  });
+
+  client.on('message', message => {
+    if (message.content.startsWith('$setnickname ' || '$nickname ')) {
+      if (!(message.member.permissions.has('ADMINISTRATOR') || message.author.id === '1019290805963329587')) {
+        return message.reply('Sorry, you do not have permission to use this command.');
+      }
+      const nickname = message.content.slice(13);
+      message.guild.me.setNickname(nickname)
+        .then(() => {
+          message.reply(`My nickname has been changed to "${nickname}"`);
+        })
+        .catch(error => {
+          console.error(error);
+          message.reply('There was an error changing my nickname');
+        });
     }
   });
 
