@@ -2,8 +2,9 @@
 #### Version: 0.4
 #### Last Update: 4:37 PM | 3/3/2023
 ## What's new in the update?
-### `Translate system(beta) added`
-### `Block bad words system added`
+### `Translate system fixed`
+### `Music system added`
+### `Change nickname for the bot using a command added`
 ### `More responses`
 ### `Bugs fixed`
 # why you should order DisGPT?
