@@ -1,6 +1,6 @@
 # DisGPT
-#### Version: 0.4
-#### Last Update: 4:37 PM | 3/3/2023
+#### Version: 0.5
+#### Last Update: 10:48 PM | 3/4/2023
 ## What's new in the update?
 ### `Translate system fixed`
 ### `Music system added`
